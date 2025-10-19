@@ -1,6 +1,7 @@
 import express from 'express';
 import sqlite3 from 'sqlite3';
-import { execute, fetchAll, fetchFirst } from './sql.js';
+
+import { execute } from './sql.js';
 import { createCategory } from './controllers/categoryController.js';
 import { createSubcategory, getSubcategory, getAllSubcategory, getSubcategoryUnderCategory, patchSubcategory } from './controllers/subcategoryController.js';
 import { createItemUnderCategory, searchItem, patchItem, createItemUnderSubcategory, getAllItem, getAllItemsUnderSubcategory, getAllItemsUnderCategory, getItem } from './controllers/itemController.js';

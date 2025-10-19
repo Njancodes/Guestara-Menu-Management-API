@@ -1,8 +1,6 @@
 import { execute, fetchAll, fetchFirst } from '../sql.js';
 
 export const createSubcategory = async (req, res, db) => {
-    console.log(req.body);
-    console.log(req.params.name);
 
     let category_name = req.params.name;
     let category_obj;
@@ -12,7 +10,7 @@ export const createSubcategory = async (req, res, db) => {
 
     try {
         const sql = `SELECT cid FROM category WHERE category_name = ?`;
-        //FETCH ERROR
+
         category_obj = await fetchFirst(db, sql, category_name);
         if (!category_obj) {
             return res.status(404).json({ error: "Category not found" });
@@ -68,7 +66,7 @@ export const getAllSubcategory = async (req, res, db) => {
 
 export const getSubcategoryUnderCategory = async (req, res, db) => {
     const identifier = req.params.identifier;
-    console.log(identifier)
+
     let sql, params;
 
     if (!isNaN(identifier)) {
@@ -166,13 +164,14 @@ export const patchSubcategory = async (req, res, db) => {
         tax_applicability: 'is_tax_applicable'
     };
 
+    //Validating whether the values for tax be null when tax applicable is true
     if (sub_category.is_tax_applicable === 0) {
-        if (updateBody.tax  && updateBody.tax_applicability === undefined) {
+        if (updateBody.tax && updateBody.tax_applicability === undefined) {
             return res.status(400).json({ error: "Set tax_applicabilty to true to update the tax" })
         }
     }
     if (!updateBody.tax_applicability && updateBody.tax_applicability !== undefined) {
-        if (updateBody.tax ) {
+        if (updateBody.tax) {
             return res.status(400).json({ error: "Set tax_applicabilty to true to give a value to tax" })
         }
     }
@@ -204,6 +203,7 @@ export const patchSubcategory = async (req, res, db) => {
     try {
         const sql = `UPDATE sub_category SET ${updateFields.join(', ')} WHERE sid = ?`;
 
+        //I am shifting the id to the last position to align with the last parameter in the sql
         params.shift()
         params = [...params, id]
         await execute(db, sql, params);

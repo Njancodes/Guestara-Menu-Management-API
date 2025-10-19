@@ -111,6 +111,7 @@ export const patchCategory = async (req, res, db) => {
         tax_applicability: 'is_tax_applicable'
     };
 
+    //Validating whether the values for tax and tax type be null when tax applicable is true
     if (category.is_tax_applicable === 0) {
         if (updateBody.tax && updateBody.tax_type && updateBody.tax_applicability === undefined) {
             return res.status(400).json({ error: "Set tax_applicabilty to true to update the tax and tax type" })
@@ -152,6 +153,7 @@ export const patchCategory = async (req, res, db) => {
 
 
         params.shift()
+        //I am shifting the id to the last position to align with the last parameter in the sql
 
         params = [...params, id]
         console.log(params)

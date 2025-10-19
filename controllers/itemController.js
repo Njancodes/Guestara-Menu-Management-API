@@ -124,7 +124,7 @@ export const createItemUnderCategory = async (req, res, db) => {
 
     try {
         const sql = `SELECT cid FROM category WHERE category_name = ?`;
-        //FETCH ERROR
+
         category_obj = await fetchFirst(db, sql, category_name);
         if (!category_obj) {
             return res.status(404).json({ error: "Category not found" });
@@ -134,8 +134,7 @@ export const createItemUnderCategory = async (req, res, db) => {
         return res.status(500).json({ error: "Database Error" })
     }
 
-    const item = req.body
-    //DO VALIDATION AND ERROR CHECKING
+    const item = req.bodyf
 
     if (!item.name || !item.image || !item.description || !item.base_amount || item.discount === undefined) {
         return res.status(400).json({ error: "Missing required fields" });
@@ -167,15 +166,13 @@ export const createItemUnderCategory = async (req, res, db) => {
 }
 
 export const createItemUnderSubcategory = async (req, res, db) => {
-    console.log(req.body);
-    console.log(req.params.name);
 
     const sub_category_name = req.params.name;
     let sub_category_obj;
 
     try {
         const sql = `SELECT sid,cid FROM sub_category WHERE sub_category_name = ?`;
-        //FETCH ERROR
+
         sub_category_obj = await fetchFirst(db, sql, sub_category_name);
         if (!sub_category_obj) {
             return res.status(404).json({ error: "Sub-category not found" });
@@ -251,6 +248,7 @@ export const patchItem = async (req, res, db) => {
         discount: "discount",
     };
 
+    //Validating whether the values for tax be null when tax applicable is true
     if (item.is_tax_applicable === 0) {
         if (updateBody.tax && updateBody.tax_applicability === undefined) {
             return res.status(400).json({ error: "Set tax_applicabilty to true to update the tax" })
@@ -288,6 +286,7 @@ export const patchItem = async (req, res, db) => {
 
     try {
         const sql = `UPDATE item SET ${updateFields.join(', ')} WHERE tid = ?`;
+        //I am shifting the id to the last position to align with the last parameter in the sql
 
         params.shift()
         params = [...params, id]
@@ -302,7 +301,7 @@ export const patchItem = async (req, res, db) => {
 
 export const searchItem = async (req, res, db) => {
     let search_term = req.query.name;
-    console.log(search_term)
+
     if (!search_term) {
         return res.status(400).json({ error: "Give a search term" });
     }
