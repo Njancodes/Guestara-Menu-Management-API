@@ -65,7 +65,8 @@ Params: :identifier → subcategory ID
 Body: { name, fieldsToUpdate... }
 Response: Updated subcategory details.
 
-Item Management
+## Item Management
+
 POST `/category/:name/item`
 
 Create a new item directly under a category.
