@@ -116,8 +116,7 @@ export const getItem = async (req, res, db) => {
 }
 
 export const createItemUnderCategory = async (req, res, db) => {
-    console.log(req.body);
-    console.log(req.params.name);
+
 
     let category_name = req.params.name;
     let category_obj;
@@ -134,7 +133,7 @@ export const createItemUnderCategory = async (req, res, db) => {
         return res.status(500).json({ error: "Database Error" })
     }
 
-    const item = req.bodyf
+    let item = req.body
 
     if (!item.name || !item.image || !item.description || !item.base_amount || item.discount === undefined) {
         return res.status(400).json({ error: "Missing required fields" });
